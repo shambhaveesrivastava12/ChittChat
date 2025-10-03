@@ -10,7 +10,7 @@ import userRoutes from "./routes/user.routes.js";
 import connectToMongoDB from "./db/connectToMongoDB.js";
 import { app, server } from "./socket/socket.js";
 
-dotenv.config();
+dotenv.config({ path: path.resolve("./backend/.env") });
 
 const __dirname = path.resolve();
 // PORT should be assigned after calling dotenv.config() because we need to access the env variables. Didn't realize while recording the video. Sorry for the confusion.
