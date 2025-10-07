@@ -6,6 +6,7 @@ import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import SignUp from "./pages/signup/SignUp";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import ChangePassword from "./pages/ChangePassword/ChangePassword";
 import { Toaster } from "react-hot-toast";
 import { useAuthContext } from "./context/AuthContext";
 import { useContext } from "react";
@@ -26,6 +27,11 @@ function App() {
                     <Route path='/login' element={<Login />} />
                     <Route path='/signup' element={<SignUp />} />
                     <Route path="/forgot-password" element={<ForgotPassword />} />
+                </Route>
+
+                {/* Protected route for change password */}
+                <Route element={authUser ? <AuthLayout /> : <Navigate to={"/login"} />}>
+                    <Route path="/change-password" element={<ChangePassword />} />
                 </Route>
             </Routes>
             <Toaster
