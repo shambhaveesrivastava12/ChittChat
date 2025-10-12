@@ -10,7 +10,7 @@ const SearchInput = () => {
   const [search, setSearch] = useState("");
   const { setSelectedConversation, appendConversation } = useConversation();
   const { conversations } = useGetConversations();
-  const { authUser } = useAuthContext(); // the current user id is to be passed to the getConversation function
+  const { authUser } = useAuthContext(); 
   const userId = authUser?._id;
 
   const handleSubmit = async (e) => {
