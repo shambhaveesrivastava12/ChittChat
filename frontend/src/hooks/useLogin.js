@@ -6,8 +6,8 @@ const useLogin = () => {
 	const [loading, setLoading] = useState(false);
 	const { setAuthUser } = useAuthContext();
 
-	const login = async (username, password) => {
-		const success = handleInputErrors(username, password);
+	const login = async (loginInputs, password) => {
+		const success = handleInputErrors(loginInputs, password);
 		if (!success) return;
 		setLoading(true);
 		try {
@@ -16,7 +16,7 @@ const useLogin = () => {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				credentials: "include",
-				body: JSON.stringify({ username, password }),
+				body: JSON.stringify({ loginInputs, password }),
 			});
 
 			const data = await res.json();

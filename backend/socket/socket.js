@@ -87,6 +87,22 @@ io.on("connection", (socket) => {
 	// Notify all users of current online list
 	io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
+	// 🔹 Listen for typing events and relay to recipient
+	socket.on("typing", ({ to }) => {
+		const receiverSocketId = getReceiverSocketId(to);
+		if (receiverSocketId) {
+			io.to(receiverSocketId).emit("typing", { from: userId });
+		}
+		});
+
+	socket.on("stop_typing", ({ to }) => {
+		const receiverSocketId = getReceiverSocketId(to);
+		if (receiverSocketId) {
+			io.to(receiverSocketId).emit("stop_typing", { from: userId });
+		}
+	});
+
+
 	// Disconnect logic
 	socket.on("disconnect", () => {
 		console.log("🔴 User disconnected:", socket.id);

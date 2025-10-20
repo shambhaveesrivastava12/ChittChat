@@ -11,13 +11,13 @@ export const sendEmail = async (to, subject, html) => {
     const sendSmtpEmail = new brevo.SendSmtpEmail();
     sendSmtpEmail.subject = subject;
     sendSmtpEmail.htmlContent = html;
-    sendSmtpEmail.sender = { name: "ChitChat", email: process.env.SMTP_EMAIL };
+    sendSmtpEmail.sender = { name: "ChittChat", email: process.env.SMTP_EMAIL };
     sendSmtpEmail.to = [{ email: to }];
 
     const response = await apiInstance.sendTransacEmail(sendSmtpEmail);
-    console.log("✅ Email sent successfully:", response.messageId || "OK");
+    console.log("Email sent successfully:", response.messageId || "OK");
   } catch (error) {
-    console.error("❌ Error sending email:", error.response?.body || error.message);
+    console.error("Error sending email:", error.response?.body || error.message);
     throw new Error("Email could not be sent");
   }
 };

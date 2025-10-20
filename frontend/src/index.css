@@ -57,3 +57,26 @@ body {
 		transform: translate3d(4px, 0, 0);
 	}
 }
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #999;
+  animation: bounce 1.2s infinite ease-in-out;
+}
+
+.dot1 { animation-delay: 0s; }
+.dot2 { animation-delay: 0.2s; }
+.dot3 { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  	0%, 80%, 100% {
+			transform: translateY(0);
+			opacity: 0.3;
+				}
+	40% {
+		transform: translateY(-6px);
+		opacity: 1;
+	}
+	}

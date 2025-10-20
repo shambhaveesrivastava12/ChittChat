@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuthContext } from "../context/AuthContext";
 import toast from "react-hot-toast";
+import useConversation from "../zustand/useConversation";
 
 const useLogout = () => {
 	const [loading, setLoading] = useState(false);
@@ -23,6 +24,9 @@ const useLogout = () => {
 			}
 
 			localStorage.removeItem("chat-user");
+			useConversation.persist.clearStorage(); // clearing the zustand local storage conversations on logout
+			const store = useConversation.getState(); 
+			store.setConversations({ users: [], nextCursor: null, hasNextPage: false },true);// clearing the zustand memory of the old conversations
 			setAuthUser(null);
 		} catch (error) {
 			toast.error(error.message);

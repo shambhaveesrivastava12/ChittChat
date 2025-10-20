@@ -1,5 +1,5 @@
 
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
 import { BsFillSunFill, BsFillMoonFill } from 'react-icons/bs';
 

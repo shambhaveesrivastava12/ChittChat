@@ -1,12 +1,45 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useConversation from "../../zustand/useConversation";
 import MessageInput from "./MessageInput";
 import Messages from "./Messages";
+import TypingIndicator from "./TypingIndicator";
 import { TiMessages } from "react-icons/ti";
 import { useAuthContext } from "../../context/AuthContext";
+import { useSocketContext } from "../../context/SocketContext";
 
 const MessageContainer = () => {
     const { selectedConversation, setSelectedConversation } = useConversation();
+    const [isTyping, setIsTyping] = useState(false);
+    const { socket } = useSocketContext();
+
+    useEffect(() => {
+    if (!socket || !selectedConversation) return;
+
+    const currentConversationId = selectedConversation._id;
+
+    const handleTyping = ({ from }) => {
+        if (from === currentConversationId) {
+        setIsTyping(true);
+        }
+    };
+
+    const handleStopTyping = ({ from }) => {
+        if (from === currentConversationId) {
+        setIsTyping(false);
+        }
+    };
+
+    socket.on("typing", handleTyping);
+    socket.on("stop_typing", handleStopTyping);
+
+    setIsTyping(false); // reset when switching chats
+
+    return () => {
+        socket.off("typing", handleTyping);
+        socket.off("stop_typing", handleStopTyping);
+    };
+    }, [socket, selectedConversation]);
+
 
     useEffect(() => {
         // cleanup function (unmounts)
@@ -25,6 +58,7 @@ const MessageContainer = () => {
                         <span className='text-gray-900 dark:text-white font-bold'>{selectedConversation.fullName}</span>
                     </div>
                     <Messages />
+                    {isTyping && <TypingIndicator />}
                     <MessageInput />
                 </>
             )}

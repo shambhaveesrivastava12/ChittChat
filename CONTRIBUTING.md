@@ -108,11 +108,12 @@ This section contains the detailed, step-by-step instructions to get ChittChat r
 1.  Create a file named `.env` in the project's root.
 2.  Copy the following configuration into it:
 
-    ```.env
+    ```bash
     PORT=5000
-    MONGO_DB_URI=mongodb://localhost:27017/ChittChat
-    JWT_SECRET=this_is_a_super_secret_for_local_dev_12345
+    MONGO_DB_URI=mongodb://localhost:27017/
+    JWT_SECRET=your_jwt_secret
     NODE_ENV=development
+    BREVO_API_KEY=your_api_key
     ```
 
 ### Running the Application

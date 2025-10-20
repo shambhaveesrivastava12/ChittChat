@@ -1,13 +1,25 @@
+// backend/controllers/upload.controller.js
 const uploadFile = (req, res) => {
+  try {
     if (!req.file) {
-        return res.status(400).json({ error: 'No file uploaded.' });
+      console.log("❌ No file received");
+      return res.status(400).json({ error: "No file uploaded." });
     }
 
-    // Construct the publicly accessible URL for the file
-    // This will be something like /uploads/1678886400000-my-image.png
+    // ✅ Construct file URL (served from /uploads)
     const fileUrl = `/uploads/${req.file.filename}`;
+    const fileType = req.file.mimetype;
 
-    res.status(200).json({ fileUrl, fileType: req.file.mimetype });
+    console.log("✅ File uploaded successfully:", fileUrl);
+
+    res.status(200).json({ fileUrl, fileType });
+  } catch (err) {
+    console.error("❌ Upload error:", err);
+    res.status(500).json({
+      error: "File upload failed",
+      details: err.message,
+    });
+  }
 };
 
 export { uploadFile };

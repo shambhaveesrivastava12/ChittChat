@@ -87,8 +87,12 @@ export const signup = async (req, res) => {
 // ... the rest of the file (login, requestOtp, etc.) remains the same
 export const login = async (req, res) => {
 	try {
-		const { username, email, password } = req.body;
-		const user = await User.findOne({ username });
+		const { loginInputs, password } = req.body;
+    const isEmail = loginInputs.includes("@")
+
+		const user = await User.findOne(
+      isEmail? {email: loginInputs} : {username: loginInputs}
+    );
 		const isPasswordCorrect = await bcrypt.compare(
 			password,
 			user?.password || ""

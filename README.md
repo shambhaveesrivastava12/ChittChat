@@ -1,30 +1,43 @@
-# Real-Time Chatting Application
+# 💬 ChittChat: Real-Time Chatting Application
 
 This project is a **real-time chatting application** built using the **MERN stack** (MongoDB, Express, React, and Node.js). It allows users to engage in dynamic, real-time conversations with one another. The application is responsive and scalable, designed to deliver a seamless chatting experience.
 
-## Table of Contents
 
-- [Features](#features)
-- [Screenshots](#screenshots)
-- [Technologies](#technologies)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Running the Project](#running-the-project)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+![GitHub repo size](https://img.shields.io/github/repo-size/shambhaveesrivastava12/ChittChat)
+![GitHub contributors](https://img.shields.io/github/contributors/shambhaveesrivastava12/ChittChat)
+![GitHub issues](https://img.shields.io/github/issues/shambhaveesrivastava12/ChittChat)
+![GitHub forks](https://img.shields.io/github/forks/shambhaveesrivastava12/ChittChat)
+![GitHub stars](https://img.shields.io/github/stars/shambhaveesrivastava12/ChittChat)
+![MIT License](https://img.shields.io/badge/license-MIT-green)
 
-## Features
 
-- **Real-time messaging**: Users can send and receive messages instantly.
-- **MongoDB** for efficient data storage of conversations and user info.
-- **Responsive user interface** built with **React**.
-- **Express** and **Node.js** to manage the backend API and WebSocket connections.
-- **Socket.io** for real-time communication.
-- **User authentication**: Login and registration functionality.
+## 📚 Table of Contents
 
-## Screenshots
+- [🚀 Features](#🚀-features)
+- [🖼️ Screenshots](#🖼️-screenshots)
+- [🛠️ Technologies](#🛠️-technologies)
+- [🧰 Getting Started](#🧰-getting-started)
+  - [✅ Prerequisites](#✅-prerequisites)
+  - [📦 Installation](#📦-installation)
+  - [▶️ Running the Project](#▶️-running-the-project)
+  - [🐳 Docker setup](#🐳-docker-setup)
+- [📱 Usage](#📱-usage)
+- [🤝 Contributing](#🤝-contributing)
+- [📬 Contact](#📬-contact)
+- [🎉 Hacktoberfest](#🎉-hacktoberfest)
+- [📄 License](#📄-license)
+
+
+
+## 🚀 Features
+
+- **⚡ Real-time messaging** with [Socket.io](https://socket.io/)
+- **📦 MongoDB** for efficient data storage of conversations and user info.
+- **🖥️ Responsive UI** built with **React**.
+- **🌐 RESTful API** with Express and Node.js.
+- **🔐 Secure User authentication** with [JWT](https://jwtsecrets.com/)
+
+## 🖼️ Screenshots
 
 ### 1. Login Page
 
@@ -36,16 +49,43 @@ This project is a **real-time chatting application** built using the **MERN stac
 ![Chat Interface Screenshot](./screenshots/chat1.png)
 ![Chat Interface Screenshot](./screenshots/chat2.png)
 
-## Technologies
+## 🛠️ Technologies
 
-- **Frontend**: React.js
-- **Backend**: Node.js, Express.js
-- **Database**: MongoDB
-- **Real-Time Communication**: Socket.io
+<table>
+  <tr>
+    <th>💻 Frontend</th>
+    <th>⚙️ Backend</th>
+    <th>🗄️ Database</th>
+    <th>🔁 Real-Time</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://react.dev/">
+        <img src="https://img.shields.io/badge/React.js-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React.js" />
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://nodejs.org/">
+        <img src="https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" />
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://www.mongodb.com/">
+        <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://socket.io/">
+        <img src="https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white" alt="Socket.io" />
+      </a>
+    </td>
+  </tr>
+</table>
 
-## Getting Started
 
-### Prerequisites
+## 🧰 Getting Started
+
+### ✅ Prerequisites
 
 Before you begin, ensure you have the following installed:
 
@@ -53,90 +93,155 @@ Before you begin, ensure you have the following installed:
 - **MongoDB** (Ensure MongoDB is running locally or on a remote server)
 - **npm** or **yarn**
 
-### Installation
+### 📦 Installation
 
 1. Clone this repository:
-   \`\`\`bash
+   ```bash
    git clone https://github.com/shambhaveesrivastava12/ChittChat.git
    cd ChittChat
-   \`\`\`
+   ```
 
 2. Install dependencies for both the frontend and backend:
 
    - Backend:
-     \`\`\`bash
+     ```bash
      cd backend
      npm install
-     \`\`\`
+     ```
    - Frontend:
-     \`\`\`bash
+     ```bash
      cd ../frontend
      npm install
-     \`\`\`
+     ```
 
 3. Create a `.env` file in the backend folder to configure environment variables (e.g., MongoDB connection string, JWT secret).
 
-   \`\`\`bash
-   PORT=5000
-   MONGO_DB_URI=your_mongo_db_uri
-   JWT_SECRET=your_jwt_secret
-   NODE_ENV=development
-   \`\`\`
 
-   ### 💡For mongodb link, use cloud.mongodb.com -> Create Deployment -> Create User -> Allow Traffic 0.0.0.0 -> Connect via drivers ->Use username and password in project.
+    ```bash
+    PORT=5000
+    MONGO_DB_URI=mongodb://localhost:27017/
+    JWT_SECRET=your_jwt_secret
+    NODE_ENV=development
+    BREVO_API_KEY=your_api_key
+    FRONTEND_URLS=<your_localhost>,<official_domain>[Multiple links can be provided separated by ',']
+    SMTP_EMAIL=your_brevo_smtp_mail
+    SMTP_HOST=smtp-relay.brevo.com
+    SMTP_PASS=your_smtp_brevo_master_password
+    SMTP_PORT=587
+    SMTP_USER=your_smtp_brevo_user
+    VITE_API_URL=your_backend_link
+    VITE_SOCKET_URL=your_backend_link
+    ```
+   - 💡For ``mongodb`` link, use ```cloud.mongodb.com -> Create Deployment -> Create User -> Allow Traffic 0.0.0.0 -> Connect via drivers ->Use username and password in project```.
    
-   ### 💡For jwttoken, use '''openssl rand -base64 32''' in your terminal.
+   - 💡To generate ``jwttoken`` , use ```openssl rand -base64 32``` in your terminal.
 
-### Running the Project
+### 💡 Setting Up the GIPHY API Key (for GIF Feature)
+
+To enable the GIF search feature, you will need a free API key from GIPHY.
+
+1.  **Create an Account:** Go to the [GIPHY Developers](https://developers.giphy.com/) website and create a free account.
+2.  **Create an App:** After logging in to your developer dashboard, click "Create an App". Select the "API" option.
+3.  **Get Your API Key:** Give your app a name and description. GIPHY will then provide you with your API Key. Copy this key.
+4.  **Add Key to `.env` File:** Open the `.env` file in the root of the project. Find the `VITE_GIPHY_API_KEY` line (or add it if it's not there) and paste your key after the equals sign.
+
+    The line in your `.env` file should look like this:
+    ```
+    VITE_GIPHY_API_KEY=d2s4f6g8h0j1k2l3...
+    ```
+
+5.  **Restart Your Server:** Stop and restart your development server for the key to be loaded.
+
+
+### ▶️ Running the Project
+
 
 1. **Start the backend server**:
-   \`\`\`bash
+   ```bash
    cd backend
    npm run server
-   \`\`\`
+   ```
 
 2. **Start the frontend React app**:
-   \`\`\`bash
+   ```bash
    cd ../frontend
    npm run dev
-   \`\`\`
+   ```
 
 3. **Access the application**:
    Open your browser and go to `http://localhost:5000`.
 
-## Usage
+### 🐳 Docker setup
+
+#### ⚙️ Prerequisites
+- Ensure **Docker Desktop** is installed and running on your machine.
+- No need to install Node.js, MongoDB, or any dependencies manually.
+
+1. **🖥️ Frontend setup**:
+ ```
+ cd frontend
+ docker-compose up -d
+```
+
+
+✅ This will:
+
+- Build and run the frontend React app in a container.
+- Serve the app at http://localhost:3001.
+- Automatically install dependencies inside the container.
+
+
+2. **🔧 Backend setup**:
+ ```
+ cd backend  
+ docker-compose up -d
+```
+  ✅ This will:
+
+- Build and run the backend Node.js server in a container.
+- Connect to MongoDB (also containerized if configured).
+- Serve the API at http://localhost:3000.
+- Automatically install backend dependencies.
+
+## 📱 Usage
 
 - Register for an account or log in with an existing one.
 - Start a chat with online users and enjoy real-time messaging.
 
-## Contributing
+## 🤝 Contributing
 
 If you'd like to contribute, feel free to submit a pull request or open an issue.
 
-## License
-
-This project is licensed under the MIT License.
+## 📬 Contact
+For questions or suggestions, reach out via [GitHub Issues](https://github.com/shambhaveesrivastava12/ChittChat/issues) or connect with the maintainer [@shambhaveesrivastava12](https://github.com/shambhaveesrivastava12).
 
 ## 🎉 Hacktoberfest
 
 This project is participating in Hacktoberfest 2025! 🍂
 We welcome contributions from developers of all levels.
 
-### ✅ What you can contribute:
+### We welcome contributions from developers of all levels!
 
-Fix bugs 🐛
+✅ You Can:
+ - Fix bugs 🐛
+ - Add features 🚀
+ - Improve documentation 📚
+ - Enhance UI/UX 🎨
 
-Add new features 🚀
+❌ Please Avoid:
+- Spammy or low-quality PRs
+- Automated PRs without meaningful changes
 
-Improve documentation 📚
+## 📖 Inspiration
+![burakorkmez]((https://github.com/burakorkmez))
 
-Enhance UI/UX 🎨
+## 📄 License
 
-### ❌ What will not be accepted:
+This project is licensed under The MIT License (MIT)
 
-Spammy or low-quality PRs
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-Automated PRs without meaningful contribution
+The credit notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-Inspiration: ![burakorkmez]((https://github.com/burakorkmez))
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
