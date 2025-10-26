@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import useGetUserProfileData from "../../hooks/useGetUserProfileData";
 import useUpdateProfile from "../../hooks/useUpdateProfile";
+import { IoIosArrowBack } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
+
 
 const ProfilePage = () => {
   const { profileData, loading } = useGetUserProfileData();
@@ -11,6 +14,7 @@ const ProfilePage = () => {
     about: profileData?.about || '',
     avatar: profileData?.avatar || ''
   });
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (profileData) {
@@ -58,7 +62,10 @@ const ProfilePage = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen px-4">
-      <div className="w-full max-w-xl rounded-lg bg-gray-300 dark:bg-gray-900/60 backdrop-filter backdrop-blur-md bg-opacity-40 shadow-lg p-8">
+      <div className="w-full max-w-xl rounded-lg bg-gray-300 dark:bg-gray-900/60 backdrop-filter backdrop-blur-md bg-opacity-40 shadow-lg p-8 relative">
+        <IoIosArrowBack className="absolute top-6 left-5 cursor-pointer h-[25px] w-[25px] text-gray-700" onClick={() => {
+            navigate('/chat')
+        }}/>
         {profileData ? (
           !isEditing ? (
             <div className="flex flex-col items-center space-y-8">
@@ -155,7 +162,7 @@ const ProfilePage = () => {
           )
         ) : (
           <div className="text-gray-700 dark:text-gray-300 font-semibold text-2xl">
-            No profile data available.
+            <p className="text-center">No profile data available.</p>
           </div>
         )}
       </div>
