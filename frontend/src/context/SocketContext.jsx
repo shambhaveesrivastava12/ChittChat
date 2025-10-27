@@ -4,6 +4,7 @@ import io from "socket.io-client";
 
 const SocketContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useSocketContext = () => {
 	return useContext(SocketContext);
 };
@@ -16,11 +17,13 @@ export const SocketContextProvider = ({ children }) => {
 	useEffect(() => {
 		if (authUser) {
 			const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || window.location.origin;
-			const token = JSON.parse(localStorage.getItem("chat-token")); // getting the parsed token from local storage
+			// Token is stored as a raw JWT string; don't JSON.parse it
+			const tokenStr = localStorage.getItem("chat-token") || "";
 
 			const socket = io(SOCKET_URL, {
 				auth: {
-					token,
+					// Provide both the raw token and userId to avoid server-side JSON parsing/require
+					token: { token: tokenStr, userId: authUser?._id },
 				},
 				withCredentials: true,
 			});
@@ -34,10 +37,11 @@ export const SocketContextProvider = ({ children }) => {
 
 			return () => socket.close();
 		} else {
-			if (socket) {
-				socket.close();
-				setSocket(null);
-			}
+			// Close and clear any existing socket without referencing it in deps
+			setSocket((prev) => {
+				if (prev) prev.close();
+				return null;
+			});
 		}
 	}, [authUser]);
 
