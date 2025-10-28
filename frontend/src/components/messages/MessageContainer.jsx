@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useMemo, useState } from "react";
 import useConversation from "../../zustand/useConversation";
 import MessageInput from "./MessageInput";
 import Messages from "./Messages";
@@ -6,6 +6,9 @@ import TypingIndicator from "./TypingIndicator";
 import { TiMessages } from "react-icons/ti";
 import { useAuthContext } from "../../context/AuthContext";
 import { useSocketContext } from "../../context/SocketContext";
+import useGetBlockedUsers from "../../hooks/useGetBlockedUsers";
+import useBlockUser from "../../hooks/useBlockUser";
+import useUnblockUser from "../../hooks/useUnblockUser";
 
 const MessageContainer = () => {
   const { selectedConversation, setSelectedConversation } = useConversation();
@@ -13,6 +16,14 @@ const MessageContainer = () => {
   const { socket } = useSocketContext();
   const { authUser } = useAuthContext();
   const bottomRef = useRef(null);
+  const { users: blockedUsers, refresh: refreshBlocked } = useGetBlockedUsers();
+  const { blockUser } = useBlockUser();
+  const { unblockUser } = useUnblockUser();
+
+    const isBlocked = useMemo(() => {
+        if (!selectedConversation) return false;
+        return blockedUsers?.some((u) => u._id === selectedConversation._id);
+    }, [blockedUsers, selectedConversation]);
 
   // Handle socket typing events
   useEffect(() => {
@@ -56,6 +67,56 @@ const MessageContainer = () => {
           <p className="text-lg sm:text-xl">Welcome 👋 {authUser?.fullName} ❄</p>
           <p className="text-base sm:text-lg">Select a chat to start messaging</p>
           <TiMessages className="text-4xl sm:text-6xl text-slate-500 dark:text-slate-400 mt-2" />
+        <div className='md:min-w-[450px] flex flex-col bg-gray-100 dark:bg-gray-800'>
+            {!selectedConversation ? (
+                <NoChatSelected />
+            ) : (
+                <>
+                    {/* Header */}
+                    <div className='bg-slate-300 dark:bg-slate-700 px-4 py-2 mb-2 flex items-center justify-between'>
+                        <div>
+                            <span className='label-text text-gray-800 dark:text-gray-200'>To:</span>{" "}
+                            <span className='text-gray-900 dark:text-white font-bold'>{selectedConversation.fullName}</span>
+                        </div>
+                        <div className='flex gap-2'>
+                            {!isBlocked ? (
+                                <button
+                                    className='px-2 py-1 text-xs rounded bg-red-600 text-white'
+                                    onClick={async () => {
+                                        const ok = await blockUser(selectedConversation._id);
+                                        if (ok) {
+                                            await refreshBlocked();
+                                        }
+                                    }}
+                                >
+                                    Block
+                                </button>
+                            ) : (
+                                <button
+                                    className='px-2 py-1 text-xs rounded bg-blue-600 text-white'
+                                    onClick={async () => {
+                                        const ok = await unblockUser(selectedConversation._id);
+                                        if (ok) {
+                                            await refreshBlocked();
+                                        }
+                                    }}
+                                >
+                                    Unblock
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                    <Messages />
+                    {isTyping && <TypingIndicator />}
+                    {isBlocked ? (
+                        <div className='px-4 py-2 text-center text-sm text-gray-700 dark:text-gray-300'>
+                            You have blocked this user. Unblock to send messages.
+                        </div>
+                    ) : (
+                        <MessageInput />
+                    )}
+                </>
+            )}
         </div>
       </div>
     );

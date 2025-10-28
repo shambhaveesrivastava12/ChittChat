@@ -6,6 +6,7 @@ import Login from "./pages/login/Login";
 import SignUp from "./pages/signup/SignUp";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import ProfilePage from "./pages/profile/ProfilePage";
+import BlockedUsers from "./pages/profile/BlockedUsers";
 import { Toaster } from "react-hot-toast";
 import { useAuthContext } from "./context/AuthContext";
 import { useContext } from "react";
@@ -33,6 +34,7 @@ function App() {
                     <>
                     <Route path='/chat' element={<Home />} />
                     <Route path='/profile' element={<ProfilePage />} />
+                    <Route path='/blocked' element={<BlockedUsers />} />
                     </>
                 )}
                 </Routes>

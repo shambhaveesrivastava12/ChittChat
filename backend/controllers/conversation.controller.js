@@ -14,7 +14,7 @@ export const getConversation = async (req, res) => {
       return res.status(400).json({ error: "provide the user id" });
     }
 
-    // querying the user collection to find user by username
+  // querying the user collection to find user by username
     const user1Details = await User.findOne({username})
     if(!user1Details){
       return res.status(404).json({ error: "user with the provided username not found" });
@@ -29,10 +29,21 @@ export const getConversation = async (req, res) => {
       return res.status(400).json({ error: "Invalid user ID format" });
     }
     
-    const user2idExists = await User.findById(user2id) // checking if user 2 exists
+  const user2idExists = await User.findById(user2id) // checking if user 2 exists
 
     if(!user2idExists){
       return res.status(404).json({ error: "user 2 does not exist" });
+    }
+
+    // Enforce block list both ways
+    const [user1, user2] = await Promise.all([
+      User.findById(user1id).select('blockedUsers'),
+      User.findById(user2id).select('blockedUsers')
+    ]);
+    const oneBlockedTwo = user1?.blockedUsers?.some(id => String(id) === String(user2id))
+    const twoBlockedOne = user2?.blockedUsers?.some(id => String(id) === String(user1id))
+    if (oneBlockedTwo || twoBlockedOne) {
+      return res.status(403).json({ error: "You cannot start or view a conversation with this user" });
     }
 
     let conversation = await Conversation.findOne({
