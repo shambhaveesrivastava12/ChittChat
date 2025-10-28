@@ -38,6 +38,14 @@ const userSchema = new mongoose.Schema(
     otpExpire: {
       type: Date,
     },
+    // Users this user has blocked
+    blockedUsers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        index: true,
+      },
+    ],
     // createdAt, updatedAt => Member since <createdAt>
   },
   { timestamps: true }

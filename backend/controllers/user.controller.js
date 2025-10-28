@@ -5,23 +5,26 @@ export const getUsersForSidebar = async (req, res) => {
 	try {
 		const loggedInUserId = req.user._id;
 
+		// Load current user's block list to filter
+		const me = await User.findById(loggedInUserId).select("blockedUsers");
+
 		// getting the limit and cursor from the req.query object if they are defined the defaults for limit and cursor are 20 and null respectively
 		const limit = parseInt(req.query.limit) || 20
 		const cursor = req.query.cursor ? new mongoose.Types.ObjectId(req.query.cursor) : null;
 
 
-		// building the filter
-		let filter = {
-			_id: { $ne: loggedInUserId }
+		// build filter using $and to compose conditions
+		const andFilter = [
+			{ _id: { $ne: loggedInUserId } },
+			{ blockedUsers: { $ne: loggedInUserId } },
+		];
+		if (me?.blockedUsers?.length) {
+			andFilter.push({ _id: { $nin: me.blockedUsers } });
 		}
-
-		// if the cursor is provided
-		if(cursor){
-			filter._id = {
-				$gt: cursor,
-				$ne: loggedInUserId
-			}
+		if (cursor) {
+			andFilter.push({ _id: { $gt: cursor } });
 		}
+		const filter = { $and: andFilter };
 
 		const filteredUsers = await User.find(filter)
 										.select("-password")
@@ -110,4 +113,77 @@ export const updateProfile = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
+};
+
+// Block a user
+export const blockUser = async (req, res) => {
+	try {
+		const blockerId = req.user._id;
+		const { id: blockeeId } = req.params;
+
+		if (!mongoose.Types.ObjectId.isValid(blockeeId)) {
+			return res.status(400).json({ error: "Invalid user id" });
+		}
+		if (String(blockerId) === String(blockeeId)) {
+			return res.status(400).json({ error: "You cannot block yourself" });
+		}
+
+		const blockee = await User.findById(blockeeId).select("_id");
+		if (!blockee) return res.status(404).json({ error: "User not found" });
+
+		await User.findByIdAndUpdate(
+			blockerId,
+			{ $addToSet: { blockedUsers: blockeeId } },
+			{ new: true }
+		);
+
+		return res.status(200).json({ message: "User blocked" });
+	} catch (error) {
+		console.error("Error blocking user:", error.message);
+		return res.status(500).json({ error: "Internal server error" });
+	}
+};
+
+// Unblock a user
+export const unblockUser = async (req, res) => {
+	try {
+		const blockerId = req.user._id;
+		const { id: blockeeId } = req.params;
+
+		if (!mongoose.Types.ObjectId.isValid(blockeeId)) {
+			return res.status(400).json({ error: "Invalid user id" });
+		}
+
+		await User.findByIdAndUpdate(
+			blockerId,
+			{ $pull: { blockedUsers: blockeeId } },
+			{ new: true }
+		);
+
+		return res.status(200).json({ message: "User unblocked" });
+	} catch (error) {
+		console.error("Error unblocking user:", error.message);
+		return res.status(500).json({ error: "Internal server error" });
+	}
+};
+
+// List all blocked users
+export const getBlockedUsers = async (req, res) => {
+	try {
+		const me = await User.findById(req.user._id).populate({
+			path: "blockedUsers",
+			select: "fullName username email profilePic",
+		});
+		const users = (me?.blockedUsers || []).map((u) => ({
+			_id: u._id,
+			fullName: u.fullName,
+			username: u.username,
+			email: u.email,
+			profilePic: u.profilePic,
+		}));
+		return res.status(200).json({ users });
+	} catch (error) {
+		console.error("Error getting blocked users:", error.message);
+		return res.status(500).json({ error: "Internal server error" });
+	}
 };
