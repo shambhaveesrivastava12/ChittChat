@@ -49,6 +49,14 @@ This project is a **real-time chatting application** built using the **MERN stac
 ![Chat Interface Screenshot](./screenshots/chat1.png)
 ![Chat Interface Screenshot](./screenshots/chat2.png)
 
+## 👩‍💻 Contributors
+
+Thanks to all these amazing people for contributing 💖
+
+<a href="https://github.com/shambhaveesrivastava12/Chittchat/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=shambhaveesrivastava12/Chittchat" />
+</a>
+
 ## 🛠️ Technologies
 
 <table>
@@ -211,15 +219,6 @@ To enable the GIF search feature, you will need a free API key from GIPHY.
 ## 🤝 Contributing
 
 If you'd like to contribute, feel free to submit a pull request or open an issue.
-
-## 👩‍💻 Contributors
-
-Thanks to all these amazing people for contributing 💖
-
-<a href="https://github.com/shambhaveesrivastava12/Chittchat/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=shambhaveesrivastava12/Chittchat" />
-</a>
-
 
 ## 📬 Contact
 For questions or suggestions, reach out via [GitHub Issues](https://github.com/shambhaveesrivastava12/ChittChat/issues) or connect with the maintainer [@shambhaveesrivastava12](https://github.com/shambhaveesrivastava12).
