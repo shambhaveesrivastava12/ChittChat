@@ -8,7 +8,6 @@ import useUnblockUser from "../../hooks/useUnblockUser";
 import MessageInput from "./MessageInput";
 import Messages from "./Messages";
 import TypingIndicator from "./TypingIndicator";
-import NoChatSelected from "./NoChatSelected";
 
 const MessageContainer = () => {
   const { selectedConversation, isTyping } = useConversation();
