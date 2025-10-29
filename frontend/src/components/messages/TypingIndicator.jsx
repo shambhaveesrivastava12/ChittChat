@@ -1,5 +1,3 @@
-
-
 const TypingIndicator = () => (
   <div className="flex items-center gap-2 px-4 py-2">
     <div className="flex space-x-1">
