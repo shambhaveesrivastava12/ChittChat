@@ -17,7 +17,22 @@ const useListenMessages = () => {
 			setMessages([...messages, newMessage]);
 		});
 
-		return () => socket?.off("newMessage");
+		// Update messages as seen on sender's side
+		socket?.on("messagesSeen", ({ by, messageIds }) => {
+			if (!Array.isArray(messageIds) || !messageIds.length) return;
+			setMessages(
+				messages.map((m) =>
+					messageIds.some((id) => String(id) === String(m._id))
+						? { ...m, seenBy: Array.isArray(m.seenBy) ? [...new Set([...m.seenBy, by])] : [by] }
+						: m
+				)
+			);
+		});
+
+		return () => {
+			socket?.off("newMessage");
+			socket?.off("messagesSeen");
+		};
 	}, [socket, setMessages, messages]);
 };
 export default useListenMessages;

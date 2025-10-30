@@ -21,6 +21,14 @@ const messageSchema = new mongoose.Schema(
         fileType: {
             type: String,
         },
+        deliveredTo: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        }],
+        seenBy: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        }],
         // createdAt, updatedAt
     },
     { timestamps: true }
