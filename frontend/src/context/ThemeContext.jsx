@@ -1,18 +1,31 @@
-import React, { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect } from "react";
 
 export const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem("theme") || "light";
+    } catch {
+      return "light";
+    }
+  });
 
   useEffect(() => {
-    const root = document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark');
+    if (typeof document === "undefined") return;
+
+    const root = document.documentElement; // <html>
+    const body = document.body;
+
+    if (theme === "dark") {
+      root.classList.add("dark");
+      body.classList.remove("light-mode");
     } else {
-      root.classList.remove('dark');
+      root.classList.remove("dark");
+      body.classList.add("light-mode");
     }
-    localStorage.setItem('theme', theme);
+
+    localStorage.setItem("theme", theme);
   }, [theme]);
 
   return (
