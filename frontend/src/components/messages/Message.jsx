@@ -3,6 +3,7 @@ import { useAuthContext } from "../../context/AuthContext";
 import { extractTime } from "../../utils/extractTime";
 import useConversation from "../../zustand/useConversation";
 import { FaFileAlt } from "react-icons/fa";
+import { FaCheck, FaCheckDouble } from "react-icons/fa";
 import ReactMarkdown from "react-markdown";
 // 1. IMPORT THE NEW PLUGIN
 import remarkGfm from "remark-gfm";
@@ -72,9 +73,21 @@ const Message = ({ message }) => {
                 )}
             </div>
 
-            <div className="chat-footer opacity-50 text-xs flex gap-1 items-center text-gray-800 dark:text-gray-300">
-                {formattedTime}
-            </div>
+                        <div className="chat-footer opacity-50 text-xs flex gap-1 items-center text-gray-800 dark:text-gray-300">
+                                {formattedTime}
+                                {fromMe && (
+                                    <span className="ml-1 flex items-center">
+                                        {/* WhatsApp-like ticks */}
+                                        {message.seenBy && message.seenBy.length > 0 ? (
+                                            <FaCheckDouble style={{ color: "#25D366" }} title="Seen" />
+                                        ) : message.deliveredTo && message.deliveredTo.length > 0 ? (
+                                            <FaCheckDouble style={{ color: "#aaa" }} title="Delivered" />
+                                        ) : (
+                                            <FaCheck style={{ color: "#aaa" }} title="Sent" />
+                                        )}
+                                    </span>
+                                )}
+                        </div>
         </div>
     );
 };

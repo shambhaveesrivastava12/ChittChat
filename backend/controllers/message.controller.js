@@ -41,6 +41,8 @@ export const sendMessage = async (req, res) => {
 			message,
 			fileUrl,
 			fileType,
+			deliveredTo: [receiverId], // Mark as delivered to receiver
+			seenBy: [],
 		});
 
 		if (newMessage) {
@@ -78,15 +80,41 @@ export const getMessages = async (req, res) => {
 			return res.status(403).json({ error: "You cannot view messages with this user" });
 		}
 
-		const conversation = await Conversation.findOne({
-			participants: { $all: [senderId, userToChatId] },
-		}).populate("messages"); // NOT REFERENCE BUT ACTUAL MESSAGES
+				const conversation = await Conversation.findOne({
+						participants: { $all: [senderId, userToChatId] },
+				}).populate("messages");
 
-		if (!conversation) return res.status(200).json([]);
+				if (!conversation) return res.status(200).json([]);
 
-		const messages = conversation.messages;
+				// Determine which messages should be marked as seen
+				const toMarkSeen = conversation.messages.filter(
+					(m) => String(m.receiverId) === String(senderId) && !(m.seenBy || []).some((u) => String(u) === String(senderId))
+				);
+				const toMarkIds = toMarkSeen.map((m) => m._id);
 
-		res.status(200).json(messages);
+				if (toMarkIds.length) {
+					await Message.updateMany(
+						{ _id: { $in: toMarkIds } },
+						{ $addToSet: { seenBy: senderId } }
+					);
+
+					// Notify original sender that these messages were seen
+					const otherUserSocketId = getReceiverSocketId(userToChatId);
+					if (otherUserSocketId) {
+						io.to(otherUserSocketId).emit("messagesSeen", {
+							by: senderId,
+							messageIds: toMarkIds,
+						});
+					}
+				}
+
+				// Refetch messages to get updated seenBy
+				const updatedConversation = await Conversation.findOne({
+						participants: { $all: [senderId, userToChatId] },
+				}).populate("messages");
+				const messages = updatedConversation.messages;
+
+				res.status(200).json(messages);
 	} catch (error) {
 		console.log("Error in getMessages controller: ", error.message);
 		res.status(500).json({ error: "Internal server error" });
